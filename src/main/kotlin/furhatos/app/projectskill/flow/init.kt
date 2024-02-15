@@ -8,6 +8,7 @@ import furhatos.flow.kotlin.State
 import furhatos.flow.kotlin.furhat
 import furhatos.flow.kotlin.state
 import furhatos.flow.kotlin.users
+import furhatos.flow.kotlin.voice.Voice
 import furhatos.records.Faceprint
 
 val Init: State = state {
@@ -18,19 +19,19 @@ val Init: State = state {
         /** Character Params */
 
         furhat.character = "Alex"
-//        furhat.voice = Voice("Matthew-neural")
+        furhat.voice = Voice("Matthew-neural")
     }
     onEntry {
         /** start interaction */
-        goto(Greeting)
-//        when {
-//            furhat.isVirtual() -> goto(Greeting) // Convenient to bypass the need for user when running Virtual Furhat
-//            users.hasAny() -> {
-//                furhat.attend(users.random)
-//                goto(Greeting)
-//            }
-//            else -> goto(Idle)
-//        }
+//        goto(Greeting)
+        when {
+            furhat.isVirtual() -> goto(Greeting) // Convenient to bypass the need for user when running Virtual Furhat
+            users.hasAny() -> {
+                furhat.attend(users.random)
+                goto(Greeting)
+            }
+            else -> goto(Idle)
+        }
     }
 
 }
