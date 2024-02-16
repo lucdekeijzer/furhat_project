@@ -35,3 +35,30 @@ class StuckReadWell : Intent() {
         )
     }
 }
+
+class ReadQuestionWell : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf(
+            "When squares are put in a row it looks like this, 13 matches are needed for 4 squares. How many matches are needed to get 100 squares in a row?"
+        )
+    }
+}
+
+class NotUnderstoodTask : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf(
+            "I don't understand what the tasks asks of me",
+            "I don't get what I'm supposed to do"
+        )
+    }
+}
+
+class NoIHaveNot : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf(
+            "no I have not",
+            "know",
+            "no no"
+        )
+    }
+}

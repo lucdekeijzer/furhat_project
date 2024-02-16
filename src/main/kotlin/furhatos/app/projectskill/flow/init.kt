@@ -18,8 +18,8 @@ val Init: State = state {
 
         /** Character Params */
 
-        furhat.character = "Alex"
-        furhat.voice = Voice("Matthew-neural")
+        furhat.character = "Isabel"
+        furhat.voice = Voice("Danielle-neural")
     }
     onEntry {
         /** start interaction */
