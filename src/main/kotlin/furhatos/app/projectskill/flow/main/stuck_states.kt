@@ -70,6 +70,8 @@ val StudentMisinterpretation: State = state(Parent) {
             onResponse<StuckReadWell> {
                 furhat.say("Very good! The NLU works")
             }
+        }
+    }
     onResponse<No> {
         furhat.say("Why don't we start with that.")
         furhat.ask("Can you just read out the question word for word for me please?")
@@ -92,9 +94,9 @@ val StudentMisinterpretation: State = state(Parent) {
             }
         }
     }
-        }
-    }
 }
+
+
 
 val StudentReadWellStuck: State = state(Parent) {
     onEntry {
