@@ -31,7 +31,7 @@ class StuckReadWell : Intent() {
         return listOf(
             "yes I did read the question",
             "Yes I understood the question",
-            "I have read the assignment correctly, yes"
+            "I have read the assignment correctly, yes",
         )
     }
 }
@@ -40,6 +40,17 @@ class ReadQuestionWell : Intent() {
     override fun getExamples(lang: Language): List<String> {
         return listOf(
             "When squares are put in a row it looks like this, 13 matches are needed for 4 squares. How many matches are needed to get 100 squares in a row?"
+        )
+    }
+}
+
+class Four : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf(
+            "I see four",
+            "I see 4",
+            "I see four squares",
+            "I see 4 squares"
         )
     }
 }

@@ -11,14 +11,15 @@ val StartHelp: State = state(Parent) {
     onEntry {
         furhat.attend(users.random)
 
-        /** First classification of student in decision tree */
-        furhat.ask("Let's see if I can find out what you are struggling with. Have you tried to solve the problem yet?")
-        onResponse<Yes> {
+        var started = furhat.askYN("Have you tried solving the exercise yet?")
+        if (started) {
             furhat.say("Okay, let's see where I can help you!")
             goto(StudentMisinterpretation)
-            }
+        } else {
+            furhat.say("That's not good. Let's read the exercise together first")
         }
     }
+}
 
 
 
