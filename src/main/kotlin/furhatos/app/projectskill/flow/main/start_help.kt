@@ -14,7 +14,7 @@ val StartHelp: State = state(Parent) {
         var started = furhat.askYN("Have you tried solving the exercise yet?")
         if (started) {
             furhat.say("Okay, let's see where I can help you!")
-            goto(StudentMisinterpretation)
+            goto(StudentMisInterpretation)
         } else {
             furhat.say("That's not good. Let's read the exercise together first")
         }
