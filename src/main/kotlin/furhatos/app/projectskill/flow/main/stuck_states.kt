@@ -31,25 +31,31 @@ import furhatos.gestures.Gestures
 var understands_figure = false
 var read_exercise = false
 
-//val StudentNotRead: State = state(Parent){
-//    onEntry {
-//        furhat.attend(users.random)
-//        furhat.say("Let's read the exercise together shall we.")
-//        furhat.ask("Can you read me the question word for word for me please" + Gestures.BigSmile)
-//    }
-//    onResponse<ReadQuestionWell> {
-//        read_exercise = true
-//        var continue_on = furhat.askYN("Very well! Do you think you can continue on by yourself for now? Maybe try some different approaches or explore the task some more")
-//        if (continue_on) {
-//            furhat.say("Great! Let me know if you need any more help!" + Gestures.BigSmile)
-//            goto(Idle)
-//        } else {
-//            furhat.say("Alright, I'll help you explore the question a little bit")
-//
-//        }
-//
-//    }
-//}
+val StudentNotRead: State = state(Parent){
+    onEntry {
+        furhat.attend(users.random)
+        furhat.say("Let's read the exercise together shall we?")
+        furhat.ask("Can you read me the question word for word for me please")
+    }
+    onReentry {
+        furhat.ask("That wasn't quite right, but it could also be that I didn't understand you correctly. Would you please try again?")
+    }
+    onResponse<ReadQuestionWell> {
+        read_exercise = true
+        var continue_on = furhat.askYN("Very well! Do you think you can continue on by yourself for now? Maybe try some different approaches or explore the task some more")
+        if (continue_on) {
+            furhat.say("Great! Let me know if you need any more help!")
+            goto(Idle)
+        } else {
+            furhat.say("Alright, I'll help you explore the question a little bit")
+
+        }
+
+    }
+    onResponse {
+        reentry()
+    }
+}
 
 val StudentMisInterpretation: State = state(Parent) {
     onEntry {
@@ -65,7 +71,13 @@ val StudentMisInterpretation: State = state(Parent) {
                 call(UnderstandingFigure)
                 furhat.say("We are back in the misinterpretation state")
             }
+        } else {
+            goto(StudentNotRead)
         }
+
+    }
+    onReentry {
+        furhat.say("Seems like you're still having some trouble with the exercises")
     }
 }
 

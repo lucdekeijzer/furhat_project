@@ -73,3 +73,14 @@ class NoIHaveNot : Intent() {
         )
     }
 }
+
+class FurhatNeedHelp : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf(
+            "Hi Furhat, I need some help",
+            "Hey Furhat, please help me",
+            "I need Help",
+            "Could you please help me?"
+        )
+    }
+}
