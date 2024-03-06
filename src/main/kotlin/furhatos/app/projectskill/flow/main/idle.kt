@@ -1,8 +1,11 @@
 package furhatos.app.projectskill.flow.main
+import furhatos.app.projectskill.nlu.FurhatCheckSolution
 import furhatos.app.projectskill.nlu.FurhatNeedHelp
 import kotlin.random.Random
 import furhatos.app.projectskill.nlu.ReadQuestionWell
 import furhatos.flow.kotlin.*
+import furhatos.gestures.Gestures
+
 
 val Idle: State = state {
     onEntry {
@@ -18,6 +21,7 @@ val Idle: State = state {
 
     onNoResponse {
         var more_help = furhat.askYN("How is the exercise going? Do you need any help?")
+        furhat.gesture(Gestures.BigSmile)
         if (more_help){
             furhat.say("Alright let's see where I can help")
             goto(StartHelp)
@@ -28,13 +32,20 @@ val Idle: State = state {
     }
 
     onResponse<FurhatNeedHelp>{
+        furhat.attend(users.random)
         furhat.say("Hey there! I'd be glad to help you!")
         goto(StartHelp)
     }
 
-    onUserEnter {
-        furhat.attend(it)
-        goto(Greeting)
+    onResponse<FurhatCheckSolution>{
+        furhat.attend(users.random)
+        furhat.ask("Alright, let's hear your solution and see if it's correct!")
+        call(CheckSolution)
     }
+
+//    onUserEnter {
+//        furhat.attend(it)
+//        goto(Greeting)
+//    }
 
 }

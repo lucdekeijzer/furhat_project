@@ -1,4 +1,5 @@
 package furhatos.app.projectskill.flow.main
+import furhatos.app.projectskill.setting.*
 
 import furhatos.app.projectskill.flow.Parent
 import furhatos.app.projectskill.*
@@ -28,13 +29,44 @@ import furhatos.gestures.Gestures
 //                }
 //}
 
-var understands_figure = false
-var read_exercise = false
+
+
+val StudentMisInterpretation: State = state(Parent) {
+    // Main stuck state. This state is the goto state, the other states are call() states which terminate after going through them.
+    // In this state, you could go through the whole stuck file if need be.
+    onEntry {
+        furhat.attend(users.random)
+        var read_exercise_YN = furhat.askYN("Let's see if you have understood the exercise correctly. First of all, have you read the exercise?")
+        if (read_exercise_YN){
+            read_exercise = true
+            var understood = furhat.askYN("Are you sure you understood the question and the figures given to you?")
+            if (understood) {
+                call(UnderstandingFigure)
+                furhat.say("Good to hear! If you're still stuck, maybe try solving an easier exercise like 30 matches? And remember that if you have any other questions, just ask for help and I will help you explore the figure and what to do next!")
+                goto(Idle)
+            } else{
+                call(UnderstandingFigure)
+                call(UnderstandingNextStep)
+                furhat.say("Seems like you're getting it!")
+                goto(Idle)
+            }
+        } else {
+            goto(StudentNotRead)
+        }
+
+    }
+    onReentry {
+        furhat.say("Seems like you're still having some trouble with the exercises")
+        call(UnderstandingFigure)
+        call(UnderstandingNextStep)
+    }
+}
+
+
 
 val StudentNotRead: State = state(Parent){
     onEntry {
         furhat.attend(users.random)
-        furhat.say("Let's read the exercise together shall we?")
         furhat.ask("Can you read me the question word for word for me please")
     }
     onReentry {
@@ -42,12 +74,16 @@ val StudentNotRead: State = state(Parent){
     }
     onResponse<ReadQuestionWell> {
         read_exercise = true
-        var continue_on = furhat.askYN("Very well! Do you think you can continue on by yourself for now? Maybe try some different approaches or explore the task some more")
+        println(read_exercise)
+        var continue_on = furhat.askYN("Very well! Do you think you can continue on by yourself for now?")
         if (continue_on) {
-            furhat.say("Great! Let me know if you need any more help!")
+            furhat.say("Great! Maybe try some different approaches or explore the task some more. Let me know if you need any more help!")
             goto(Idle)
         } else {
-            furhat.say("Alright, I'll help you explore the question a little bit")
+            furhat.say("Alright, I'll help you explore the question a little bit!")
+            call(StudentReadWellStuck)
+            terminate()
+
 
         }
 
@@ -57,29 +93,7 @@ val StudentNotRead: State = state(Parent){
     }
 }
 
-val StudentMisInterpretation: State = state(Parent) {
-    onEntry {
-        furhat.attend(users.random)
-        var read_exercise_YN = furhat.askYN("Let's see if you have understood the exercise correctly. First of all, have you read the exercise?")
-        if (read_exercise_YN){
-            read_exercise = true
-            var understood = furhat.askYN("Are you sure you understood the question?")
-            if (understood) {
-                furhat.say("Good to hear!")
-                goto(StudentReadWellStuck)
-            } else{
-                call(UnderstandingFigure)
-                furhat.say("We are back in the misinterpretation state")
-            }
-        } else {
-            goto(StudentNotRead)
-        }
 
-    }
-    onReentry {
-        furhat.say("Seems like you're still having some trouble with the exercises")
-    }
-}
 
 val UnderstandingFigure: State = state(Parent) {
     onEntry {
@@ -93,6 +107,7 @@ val UnderstandingFigure: State = state(Parent) {
     }
     onResponse<Four> {
         furhat.say("Nice, there are indeed 4 squares")
+        understands_figure = true
         terminate()
     }
     onResponse{
@@ -100,77 +115,103 @@ val UnderstandingFigure: State = state(Parent) {
     }
 }
 
-//val StudentMisinterpretation_2: State = state(Parent) {
-//    onEntry {
-//        furhat.attend(users.random)
-//        furhat.say("Let's see if you have understood the exercise correctly")
-//        furhat.ask("First of all, have you read the exercise?")
-//    }
-//
-//    // check for two response types
-//    onResponse<Yes> {
-////        read_exercise = true
-//        var understood = furhat.askYN("Are you sure you understood the question?")
-//        if (understood) {
-//            furhat.say("Good to hear!")
-//            goto(StudentReadWellStuck)
-//        } else {
-//            furhat.ask("Could you tell me how many squares are in the figure?")
-//            onResponse<Four> {
-//                furhat.say("Very good! The NLU works")
-//            }
-//        }
-//    }
-//    onResponse<No> {
-//        furhat.say("Why don't we start with that.")
-//        furhat.ask("Can you just read out the question word for word for me please?")
-//        onResponse<ReadQuestionWell> {
-//
-//            var understood = furhat.askYN("Very good. Are you sure you understood the question?" + Gestures.Smile)
-//            if (understood) {
-//                furhat.say("Good to hear!")
-//                var more_help = furhat.askYN("Are you sure you understood the question?")
-//                if (more_help) {
-//                    goto(StudentReadWellStuck)
-//                } else {
-//                    furhat.ask("Could you tell me how many squares are in the figure?")
-//                    furhat.say("This is where the 4 thing goes.")
-//                    understands_figure = true
-//                }
-//            } else {
-//                furhat.ask("Could you tell me how many squares are in the figure?")
-//                onResponse<Four>{
-//                    furhat.say("Very good, there are 4")
-//                }
-//            }
-//        }
-//    }
-//    onResponse<Four>{
-//        furhat.say("Very good, there are 4 of them")
-//    }
-//}
 
-
+val UnderstandingNextStep: State = state(Parent){
+    onEntry {
+        furhat.attend(users.random)
+        furhat.ask("How many matchsticks do you think you need for the next square? Please answer in the following form: I need blank matchsticks for the next square")
+    }
+    onReentry {
+        furhat.say("That wasn't quite right, no worries! Have another look and try again")
+        furhat.ask("So how many matchsticks do you need for the next square?")
+    }
+    onResponse<Three> {
+            furhat.say("Nice, good job!")
+            understand_next_step = true
+            terminate()
+        }
+    onResponse {
+            reentry()
+        }
+}
 
 val StudentReadWellStuck: State = state(Parent) {
     onEntry {
         furhat.attend(users.random)
-        furhat.say("Hi there, this is the next state")
-        if (understands_figure == true){
-            furhat.askYN("Have you tried exploring the task a little bit further yet? ")
-
-        }
-    }
-
-    if (understands_figure == true){
-
-
-
-    }
-    else {
-
+        call(UnderstandingFigure)
+        call(UnderstandingNextStep)
     }
 }
+
+val StuckAfterFiveSquares: State = state(Parent){
+    onEntry {
+        if (!understand_next_step){
+            call(UnderstandingNextStep)
+        } else{
+        furhat.say("Lets see if I can help you understand how to continue. So you know how many matches you need to add another square to the existing four.")
+        furhat.ask("So let's do the same thing again. If you have 5 squares now, and you want to add another, how many matches do you need?")
+    }}
+    onResponse<Three> {
+        furhat.say("You're getting it! Now try to find the pattern in this. Maybe draw a table, or draw the figure. Do that for a smaller number of squares.")
+        furhat.gesture(Gestures.BigSmile)
+        furhat.say("You can do this. If you want me to check your solution, just say: Furhat, could you check my solution")
+        terminate()
+    }
+    onResponse {
+        furhat.say("That wasn't quite right. Think about how you did the process for  ")
+    }
+}
+
+val CheckSolution: State = state(Parent){
+    onEntry {
+        furhat.say("Alright, let's hear it! What is your solution?")
+        terminate()
+    }
+
+}
+
+
+
+
+//    if (understands_figure == true){
+//        furhat.askYN("Have you tried exploring the task a little bit further yet? ")
+//
+//    }
+//    else{
+//        furhat.ask("How many squares do you see in the figure? Please answer in the following form: I see blank squares in the picture")
+//        onResponse<Four> {
+//            furhat.say("Nice, good job!")
+//            understands_figure = true
+//        }
+//        onResponse {
+//            furhat.say("That wasn't quite right sadly, have another look an try again")
+//            reentry()
+//        }
+//    }
+//    onReentry {
+//        if (understands_figure == true){
+//            furhat.ask("So how many matches do you think you need for the next square?")
+//            onResponse<Three> {
+//                furhat.say("Super! You're getting it!")
+//                understand_next_step = true
+//            }
+//        } else{
+//            furhat.ask("How many squares do you see in the figure? Please answer in the following form: I see blank squares in the picture")
+//            onResponse<Four> {
+//                furhat.say("Nice, good job!")
+//                understands_figure = true
+//                reentry()
+//            }
+//            onResponse {
+//                furhat.say( "That wasn't quite right. Try again!")
+//                reentry()
+//            }
+//        }
+//
+//
+//    }
+
+//}
 
 //            var userInput: String? = null
 //

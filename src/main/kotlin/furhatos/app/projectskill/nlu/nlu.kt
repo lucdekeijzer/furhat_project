@@ -74,13 +74,38 @@ class NoIHaveNot : Intent() {
     }
 }
 
+class Three : Intent() {
+    override fun getExamples(lang: Language): List<String> {
+        return listOf(
+            "You need 3 more matches for the next square",
+            "I think you need 3",
+            "I would say 3",
+            "The answer is 3",
+            "You need 3 matches"
+        )
+    }
+}
+
 class FurhatNeedHelp : Intent() {
     override fun getExamples(lang: Language): List<String> {
         return listOf(
             "Hi Furhat, I need some help",
             "Hey Furhat, please help me",
             "I need Help",
-            "Could you please help me?"
+            "Could you please help me?",
+            "Can you help me?"
+        )
+    }
+}
+
+class FurhatCheckSolution : Intent() {
+    override fun getExamples(lang : Language): List<String>{
+        return listOf(
+            "Hey Furhat, could you check my solution?",
+            "I think I've found a solution, could you check it for me",
+            "Could you check my answer",
+            "Hi furhat, I have an answer, can you check it for me?",
+            "I've found the correct answer!"
         )
     }
 }
