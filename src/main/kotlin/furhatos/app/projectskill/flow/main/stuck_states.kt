@@ -162,10 +162,16 @@ val StuckAfterFiveSquares: State = state(Parent){
     }
 }
 
-val CheckSolution: State = state(Parent){
+val CheckSolutionState: State = state(Parent){
     onEntry {
-        furhat.say("Alright, let's hear it! What is your solution?")
-        terminate()
+        furhat.ask("Alright, let's hear it! What is your solution?")
+    }
+    onResponse<CorrectSolution> {
+        furhat.say("Nice! Well done! I knew you could do it")
+    }
+    onResponse {
+        furhat.say("Ah that's not quite right, but have another think! Call me when you're ready with a new answer!")
+        goto(Idle)
     }
 
 }

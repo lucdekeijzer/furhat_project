@@ -11,14 +11,23 @@ import furhatos.app.projectskill.setting.*
 
 val StartHelp: State = state(Parent) {
     onEntry {
+        furhat.say("This is the next state")
+
         println(read_exercise)
         println(understands_figure)
         println(understand_next_step)
-        furhat.attend(users.random)
+//        furhat.say("We are getting here 1")
         if (read_exercise) {
+//            furhat.say("We are getting here 2")
             if (understands_figure) {
                 if (understand_next_step) {
                     call(StuckAfterFiveSquares)
+                    furhat.say("You should have all the steps you need to figure out the answer to the question now. If you think you have the right answer, ask me to check your solution!")
+                    goto(Idle)
+                } else {
+                    call(UnderstandingNextStep)
+                    furhat.say("I'll leave you alone to try and finish the exercise now! As always, if you need help, just say my name and ask for help")
+                    goto(Idle)
                 }
             } else {
                 call(UnderstandingFigure)
@@ -37,6 +46,7 @@ val StartHelp: State = state(Parent) {
         }
     }
     onReentry {
+        furhat.say("We are going into the reentry")
 
         if (read_exercise){
             if (understands_figure){

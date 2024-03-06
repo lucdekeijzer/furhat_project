@@ -91,9 +91,11 @@ class FurhatNeedHelp : Intent() {
         return listOf(
             "Hi Furhat, I need some help",
             "Hey Furhat, please help me",
-            "I need Help",
+            "I need help",
             "Could you please help me?",
-            "Can you help me?"
+            "Can you help me?",
+            "Help",
+            "Please help"
         )
     }
 }
@@ -105,7 +107,23 @@ class FurhatCheckSolution : Intent() {
             "I think I've found a solution, could you check it for me",
             "Could you check my answer",
             "Hi furhat, I have an answer, can you check it for me?",
-            "I've found the correct answer!"
+            "I've found the correct answer!",
+            "Can you check my solution?"
         )
     }
 }
+
+class CorrectSolution : Intent() {
+    override fun getExamples(lang: Language): List<String>{
+        return listOf(
+            "301",
+            "three hundred and one",
+            "3x + 1",
+            "The amount of matches for 100 squares is 301",
+            "You need 3001 matches",
+            "The correct formula is 3x+1",
+            "I think you need 3001 matches"
+        )
+    }
+}
+

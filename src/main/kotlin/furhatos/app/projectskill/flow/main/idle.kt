@@ -34,13 +34,12 @@ val Idle: State = state {
     onResponse<FurhatNeedHelp>{
         furhat.attend(users.random)
         furhat.say("Hey there! I'd be glad to help you!")
-        goto(StartHelp)
+        call(StartHelp)
     }
 
     onResponse<FurhatCheckSolution>{
         furhat.attend(users.random)
-        furhat.ask("Alright, let's hear your solution and see if it's correct!")
-        call(CheckSolution)
+        goto(CheckSolutionState)
     }
 
 //    onUserEnter {
