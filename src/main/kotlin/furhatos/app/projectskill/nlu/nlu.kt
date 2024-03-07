@@ -121,8 +121,12 @@ class CorrectSolution : Intent() {
             "3x + 1",
             "The amount of matches for 100 squares is 301",
             "You need 3001 matches",
-            "The correct formula is 3x+1",
-            "I think you need 3001 matches"
+            "The correct formula is 3x + 1",
+            "I think you need 3001 matches",
+            "You need 301 matches",
+            "I think the answer is 301",
+            "I think the answer is 3001",
+            "I think you need about 301"
         )
     }
 }

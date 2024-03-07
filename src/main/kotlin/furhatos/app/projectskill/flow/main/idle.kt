@@ -10,7 +10,7 @@ import furhatos.gestures.Gestures
 val Idle: State = state {
     onEntry {
         furhat.attendNobody()
-        var random_int = Random.nextInt(90000, 120000)
+        var random_int = Random.nextInt(45000, 60000)
         furhat.listen(timeout = random_int)
     }
 

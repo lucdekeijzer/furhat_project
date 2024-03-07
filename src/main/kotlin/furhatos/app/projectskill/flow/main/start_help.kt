@@ -11,7 +11,7 @@ import furhatos.app.projectskill.setting.*
 
 val StartHelp: State = state(Parent) {
     onEntry {
-        furhat.say("This is the next state")
+
 
         println(read_exercise)
         println(understands_figure)
